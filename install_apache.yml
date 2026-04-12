@@ -1,0 +1,29 @@
+---
+- hosts: armbian_host
+  become: true
+  tasks:
+
+  - name: update reposity index
+    apt:
+      update_cache: yes
+
+  - name: install apache2 package
+    apt:
+      name: apache2
+      state: latest
+  - name: add php support for apache
+    apt:
+      name: libapache2-mod-php
+      state: latest
+- hosts: aliyun_host
+  become: true
+  tasks:
+
+  - name: update reposity index
+    dnf:
+      update_cache: yes
+
+  - name: install httpd package
+    dnf:
+      name: httpd
+      state: latest
