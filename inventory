@@ -4,8 +4,3 @@ lonelyhorse@100.87.241.39
 lonelyhorse@100.81.84.116
 #orangepi zero 2
 won@100.113.152.56
-
-[armbian_host]
-100.113.152.56 ansible_user=won
-[aliyun_host]
-100.87.241.39 ansible_user=lonelyhorse
