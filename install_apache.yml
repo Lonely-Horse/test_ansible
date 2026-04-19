@@ -8,25 +8,28 @@
       update_cache: yes
     when: ansible_distribution in ["Debian","Ubuntu"]
 
-  - name: install apache2 package
+  - name: install apache2 package and libapache2-mod-php package for Ubuntu
     apt:
-      name: apache2
-      state: latest
-    when: ansible_distribution in ["Debian","Ubuntu"]
-
-  - name: add php support for apache
-    apt:
-      name: libapache2-mod-php
+      name:
+        - apache2
+        - libapache2-mod-php
       state: latest
     when: ansible_distribution in ["Debian","Ubuntu"]
 
   - name: update reposity index
     dnf:
       update_cache: yes
+    when: ansible_distribution in ["Fedora","Rocky","CentOS"]
+
+  - name: update reposity index
+    dnf:
+      update_cache: yes
     when: ansible_distribution in ["Fedora","Rocky","Centos"]
 
-  - name: install httpd package
+  - name: install httpd package and php package for CentOS
     dnf:
-      name: httpd
+      name:
+        - httpd
+        - php
       state: latest
     when: ansible_distribution in ["Fedora","Rocky","Centos"]
