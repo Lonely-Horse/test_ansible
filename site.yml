@@ -1,0 +1,40 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates ("CentOS","Rocky","Fedora")
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution in ["CentOS","Rocky","Fedora"]
+  - name: install updates ("Debian","Ubuntu")
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution in ["Debian","Ubuntu"]
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 package and libapache2-mod-php package for Ubuntu
+    tags: apache,apache2,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution in ["Debian","Ubuntu"]
+
+  - name: install httpd package and php package for CentOS
+    tags: apache,centos,httpd
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution in ["Fedora","Rocky","Centos"]
