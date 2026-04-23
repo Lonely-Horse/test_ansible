@@ -54,6 +54,14 @@
       state: latest
     when: ansible_distribution in ["Fedora","Rocky","Centos"]
 
+  - name: start nginx (CentOS)
+    tags: centos,nginx
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+    when: ansible_distribution in ["CentOS","Rocky","Fedora"]
+
   - name: copy default html file for site
     tags: apache,apache2,httpd
     copy:
