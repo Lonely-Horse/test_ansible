@@ -7,14 +7,21 @@
   - name: install updates ("CentOS","Rocky","Fedora")
     tags: always
     dnf:
-      update_only: yes
       update_cache: yes
+    changed_when: false
     when: ansible_distribution in ["CentOS","Rocky","Fedora"]
   - name: install updates ("Debian","Ubuntu")
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
+    when: ansible_distribution in ["Debian","Ubuntu"]
+
+  - name: add user ssh-key
+    tags: always
+    authorized_key:
+      user: lonelyhorse
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJMIc8KIVvwtLFjytKeLqD4C5i4oEmpzPLbikAYkKuCL ansible"
     when: ansible_distribution in ["Debian","Ubuntu"]
 
 - hosts: workstations
