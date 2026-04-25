@@ -10,6 +10,7 @@
       update_only: yes
       update_cache: yes
     when: ansible_distribution in ["CentOS","Rocky","Fedora"]
+
   - name: install updates ("Debian","Ubuntu")
     tags: always
     apt:
@@ -17,24 +18,32 @@
       update_cache: yes
     when: ansible_distribution in ["Debian","Ubuntu"]
 
-  - name: create lonelyhorse user
+  - name: install_update (postmarkets)
+    tags: always
+    ansible.builtin.apk:
+      update_cache: yes
+      upgrade: yes
+    when: ansible_distribution == "Alpine"
+
+  - name: create thx user
     tags: always
     user:
-      name: lonelyhorse
+      name: thx
       groups: root
-    when: ansible_distribution in ["Debian","Ubuntu"]
+    when: ansible_distribution in ["Debian","Ubuntu","Alpine","Rocky"]
 
   - name: add user ssh-key
     tags: always
     authorized_key:
-      user: lonelyhorse
+      user: thx
       key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJMIc8KIVvwtLFjytKeLqD4C5i4oEmpzPLbikAYkKuCL ansible"
-    when: ansible_distribution in ["Debian","Ubuntu"]
-  - name: add a sudoer file for lonelyhorse
+    when: ansible_distribution in ["Debian","Ubuntu","Alpine","Rocky"]
+
+  - name: add a sudoer file for thx
     copy:
-      src: sudoer_lonelyhorse
-      dest: /etc/sudoers.d/lonelyhorse
+      src: sudoer_thx
+      dest: /etc/sudoers.d/thx
       owner: root
       group: root
       mode: 0440
-    when: ansible_distribution in ["Debian","Ubuntu"]
+    when: ansible_distribution in ["Debian","Ubuntu","Alpine","Rocky"]
