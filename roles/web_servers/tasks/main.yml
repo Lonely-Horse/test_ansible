@@ -1,34 +1,23 @@
-- name: install apache2 package and libapache2-mod-php package for Ubuntu
-  tags: apache,apache2,ubuntu
-  apt:
+- name: install nginx
+  tags: nginx
+  package:
     name:
-      - apache2
-      - libapache2-mod-php
+      - "{{ nginx_package_name }}"
     state: latest
-  when: ansible_distribution in ["Debian","Ubuntu"]
+  notify: restart_nginx
 
-- name: install httpd package and php package for CentOS
-  tags: apache,centos,httpd
-  dnf:
-    name:
-      - httpd
-      - php
-    state: latest
-  when: ansible_distribution in ["Fedora","Rocky","Centos"]
-
-- name: start nginx (CentOS)
-  tags: centos,nginx
+- name: start nginx
+  tags: nginx
   service:
-    name: nginx
+    name: "{{ nginx_service }}"
     state: started
     enabled: yes
-  when: ansible_distribution in ["CentOS","Rocky","Fedora"]
 
 - name: copy default html file for site
-  tags: apache,apache2,httpd
+  tags: nginx
   copy:
     src: default_site.html
-    dest: /var/www/html/index.html
+    dest: /usr/share/nginx/html/index.html
     owner: root
     group: root
     mode: 0644

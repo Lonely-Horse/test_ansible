@@ -2,4 +2,3 @@
   authorized_key:
     user: thx
     key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJMIc8KIVvwtLFjytKeLqD4C5i4oEmpzPLbikAYkKuCL ansible"
-
