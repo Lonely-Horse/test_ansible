@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>黑白 · 界面演示</title>
+    <style>
+        /* 重置 & 黑白基调 —— 只有黑、白、灰 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #111111;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', 'Noto Sans', sans-serif;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 所有交互元素严格使用黑白灰，无任何色彩 */
+        a, button, input, textarea {
+            color: inherit;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        /* 布局容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ----- 头部（极简导航）----- */
+        .site-header {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.2rem 0;
+            background: #fff;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.6rem;
+            letter-spacing: -0.02em;
+            color: #000;
+        }
+
+        .logo span {
+            font-weight: 400;
+            color: #5a5a5a;
+            margin-left: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            font-weight: 500;
+            color: #2c2c2c;
+        }
+
+        .nav-links a {
+            font-size: 1rem;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: #111;
+            color: #000;
+        }
+
+        /* ----- 主内容区 ----- */
+        main {
+            padding: 2.5rem 0 3rem;
+        }
+
+        /* 英雄区 — 纯黑白排版 */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            color: #000;
+            margin-bottom: 1rem;
+        }
+
+        .hero .subhead {
+            font-size: 1.3rem;
+            color: #3a3a3a;
+            max-width: 700px;
+            margin: 0 auto 2.2rem;
+            font-weight: 400;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* 按钮 — 纯黑白 */
+        .btn {
+            display: inline-block;
+            padding: 0.85rem 2.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1rem;
+            background: transparent;
+            border: 1.5px solid #111;
+            cursor: pointer;
+            text-align: center;
+            background-color: #fff;
+            color: #111;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn-primary {
+            background-color: #111;
+            color: #fff;
+            border: 1.5px solid #111;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e2e2e;
+            border-color: #2e2e2e;
+            color: #fff;
+            box-shadow: 0 8px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #111;
+            border: 1.5px solid #aaa;
+        }
+
+        .btn-outline:hover {
+            background-color: #f5f5f5;
+            border-color: #111;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 数据卡片 — 三列黑白统计 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.8rem;
+            margin: 3.5rem 0 5rem;
+        }
+
+        .stat-card {
+            background: #fafafa;
+            padding: 2rem 1rem;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.02);
+            transition: transform 0.15s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 14px 24px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px);
+            border-color: #b0b0b0;
+        }
+
+        .stat-number {
+            font-size: 3.4rem;
+            font-weight: 700;
+            color: #000;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #4a4a4a;
+            margin-top: 0.6rem;
+            font-weight: 500;
+        }
+
+        /* 特色区块 — 卡片网格 */
+        .section-title {
+            font-size: 2.4rem;
+            font-weight: 650;
+            color: #000;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            color: #4f4f4f;
+            margin-bottom: 2.8rem;
+            font-size: 1.1rem;
+            border-left: 4px solid #aaa;
+            padding-left: 1.2rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-item {
+            background: #fff;
+            border: 1px solid #e2e2e2;
+            border-radius: 28px;
+            padding: 2rem 1.8rem 1.8rem;
+            transition: all 0.2s;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.02);
+        }
+
+        .feature-item:hover {
+            border-color: #888;
+            box-shadow: 0 18px 28px -8px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 2.8rem;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            color: #111;
+        }
+
+        .feature-item h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #000;
+        }
+
+        .feature-item p {
+            color: #3a3a3a;
+            margin-bottom: 1.8rem;
+            font-size: 0.98rem;
+        }
+
+        .feature-link {
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #aaa;
+            padding-bottom: 2px;
+            color: #111;
+        }
+
+        .feature-link:hover {
+            border-bottom-color: #000;
+            color: #000;
+            gap: 12px;
+        }
+
+        /* 分隔装饰 (纯黑白线条) */
+        .divider {
+            margin: 4rem 0 2.5rem;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #ccc, transparent);
+        }
+
+        /* 底部 — 干净黑白 */
+        .site-footer {
+            border-top: 1px solid #ddd;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            color: #4a4a4a;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copy {
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: #2c2c2c;
+            font-size: 0.95rem;
+            border-bottom: 1px dotted #aaa;
+        }
+
+        .footer-links a:hover {
+            color: #000;
+            border-bottom-style: solid;
+        }
+
+        /* 响应式 — 依然保持黑白纯粹 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.2rem;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero .subhead {
+                font-size: 1.1rem;
+            }
+
+            .stats-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1.2rem;
+            }
+
+            .header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* 一些细微的黑白点缀 —— 图标只用unicode/字符，保持单色 */
+        .mono-badge {
+            display: inline-block;
+            background: #eee;
+            color: #111;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border: 1px solid #ccc;
+        }
+
+        /* 图片占位（纯灰度块） */
+        .avatar-placeholder {
+            width: 56px;
+            height: 56px;
+            background: #d4d4d4;
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* 一个小点缀 —— 右上角 “演示” 标识 (无彩色) */
+        .demo-tag {
+            background: #111;
+            color: #fff;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 头部 · 极简导航 -->
+<header class="site-header">
+    <div class="container header-row">
+        <div class="logo">
+            MONO<span>CHROME</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#">首页</a>
+            <a href="#">作品</a>
+            <a href="#">关于</a>
+            <a href="#">联系</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <!-- 英雄区域 —— 黑白宣言 -->
+        <section class="hero">
+            <h1>
+                黑白之间<br>无限纯粹
+            </h1>
+            <p class="subhead">
+                极简、克制、永恒。 纯粹的黑白界面演示，不掺杂任何色彩。
+            </p>
+            <div class="btn-group">
+                <button class="btn btn-primary">开始探索</button>
+                <button class="btn btn-outline">了解更多</button>
+            </div>
+            <div style="margin-top: 1.8rem;">
+                <span class="mono-badge"># 灰度美学</span>
+                <span class="mono-badge" style="margin-left: 0.6rem;"># 单色演示</span>
+            </div>
+        </section>
+
+        <!-- 数据统计卡片 — 只用黑白灰 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">240+</div>
+                <div class="stat-label">完成项目</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98%</div>
+                <div class="stat-label">客户满意</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">设计奖项</div>
+            </div>
+        </div>
+
+        <!-- 特色区块 · 黑白卡片 -->
+        <div>
+            <h2 class="section-title">设计原则 · 灰度</h2>
+            <div class="section-desc">无彩色，却拥有全部的表现力</div>
+        </div>
+
+        <div class="feature-grid">
+            <!-- 卡片 1 -->
+            <article class="feature-item">
+                <div class="feature-icon">◼︎◻︎</div>
+                <h3>极致对比</h3>
+                <p>黑白是永恒的对比。清晰、锐利，没有任何视觉噪音，让内容成为唯一的焦点。</p>
+                <a href="#" class="feature-link">了解对比 <span style="font-size:1.2em;">→</span></a>
+            </article>
+            <!-- 卡片 2 -->
+            <article class="feature-item">
+                <div class="feature-icon">◐</div>
+                <h3>灰度层次</h3>
+                <p>从#FFF到#000，丰富的灰阶构建细腻的层次。柔和但不模糊，克制且高级。</p>
+                <a href="#" class="feature-link">探索灰度 <span style="font-size:1.2em;">→</span></a>
+            </article>
+            <!-- 卡片 3 -->
+            <article class="feature-item">
+                <div class="feature-icon">◉</div>
+                <h3>永恒设计</h3>
+                <p>不受潮流左右。黑与白是设计的原点，也是最能经受时间考验的表达。</p>
+                <a href="#" class="feature-link">经典案例 <span style="font-size:1.2em;">→</span></a>
+            </article>
+        </div>
+
+        <!-- 分隔线 —— 纯装饰 -->
+        <hr class="divider">
+
+        <!-- 额外小区域：黑白身份卡（仅作演示丰富度） -->
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 2rem 0 1rem;">
+            <div style="display: flex; align-items: center;">
+                <div class="avatar-placeholder"></div>
+                <div>
+                    <div style="font-weight: 700; font-size: 1.2rem; color:#000;">Alex Chen</div>
+                    <div style="color: #555; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span>创意总监</span>
+                        <span style="color:#888;">|</span>
+                        <span>黑白影像工作室</span>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-left: auto; display: flex; gap: 1rem;">
+                <span style="background: #111; width: 8px; height: 8px; border-radius: 50%;"></span>
+                <span style="background: #666; width: 8px; height: 8px; border-radius: 50%;"></span>
+                <span style="background: #ccc; width: 8px; height: 8px; border-radius: 50%;"></span>
+                <span class="demo-tag">黑白演示</span>
+            </div>
+        </div>
+
+        <!-- 引用式短句 — 纯粹黑白风格 -->
+        <blockquote style="margin: 3rem 0 1.5rem; padding: 1.2rem 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; font-size: 1.5rem; font-weight: 400; color: #1e1e1e; text-align: center; letter-spacing: -0.01em;">
+            “ 黑白是色彩中的哲学，用最少的颜色说最多的话。 ”
+        </blockquote>
+    </div>
+</main>
+
+<!-- 页脚 · 黑白灰收尾 -->
+<footer class="site-footer">
+    <div class="container footer-content">
+        <div class="footer-copy">
+            © 2025 黑白界面演示 · 纯粹单色
+        </div>
+        <div class="footer-links">
+            <a href="#">隐私条款</a>
+            <a href="#">使用条款</a>
+            <a href="#">黑白工作室</a>
+        </div>
+    </div>
+    <!-- 极小的说明：完全符合“黑白界面，只需一个HTML” -->
+    <div class="container" style="margin-top: 1.2rem; font-size: 0.8rem; color: #777; border-top: 1px dashed #ccc; padding-top: 1.2rem;">
+        <span>⚫️ 灰度演示 · 所有元素仅使用黑、白、灰 · 单文件HTML ⚪️</span>
+    </div>
+</footer>
+
+<!-- 无需任何JavaScript，纯粹的静态黑白演示 -->
+</body>
+</html>

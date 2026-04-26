@@ -1,0 +1,87 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (CentOS,Rocky,Fedora)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution in ["CentOS","Rocky","Fedora"]
+
+  - name: install updates (Debian,Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution in ["Debian","Ubuntu"]
+
+  - name: install updates (Alpine Linux)
+    tags: always
+    ansible.builtin.apk:
+      update_cache: yes
+    when: ansible_distribution == "Alpine"
+
+  - name: add user ssh-key
+    tags: always
+    authorized_key:
+      user: thx
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJMIc8KIVvwtLFjytKeLqD4C5i4oEmpzPLbikAYkKuCL ansible"
+    when: ansible_distribution in ["Debian","Ubuntu","Alpine"]
+
+- hosts: workstations
+  become: true
+  tasks:
+  - name: install unzip
+    package:
+      name: unzip
+
+  - name: install terraform
+    unarchive:
+      src: https://releases.hashicorp.com/terraform/1.9.0/terraform_1.9.0_linux_arm64.zip
+      dest: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: root
+      group: root
+
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache2 package and libapache2-mod-php package for Ubuntu
+    tags: apache,apache2,ubuntu
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution in ["Debian","Ubuntu"]
+
+  - name: install httpd package and php package for CentOS
+    tags: apache,centos,httpd
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution in ["Fedora","Rocky","Centos"]
+
+  - name: start nginx (CentOS)
+    tags: centos,nginx
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+    when: ansible_distribution in ["CentOS","Rocky","Fedora"]
+
+  - name: copy default html file for site
+    tags: apache,apache2,httpd
+    copy:
+      src: default_site.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0644
