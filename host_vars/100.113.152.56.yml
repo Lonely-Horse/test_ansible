@@ -1,2 +1,4 @@
 nginx_package_name: nginx
 nginx_service: nginx
+ssh_users: "thx"
+ssh_template_file: sshd_config_debian.j2

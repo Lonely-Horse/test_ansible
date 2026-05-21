@@ -29,7 +29,7 @@
     tags: always
     user:
       name: thx
-      groups: root
+      group: root
     when: ansible_distribution in ["Debian","Ubuntu","Alpine","Rocky"]
 
   - name: add user ssh-key
